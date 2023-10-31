@@ -1,0 +1,134 @@
+#!/bin/bash
+
+DOMAIN="www.basealt.ru"
+PROG="net-diag"
+VERSION=0.0.1
+
+proxy_list=("$HTTP_PROXY" "$HTTPS_PROXY" "$FTP_PROXY")
+ipv6_address="2001:4860:4860::8888"
+ipv4_address="194.107.17.249"
+ping_count=3
+runcmd=run
+
+show_usage(){
+    echo "Active Directory net diagnostic tool"
+    echo ""
+    echo "Usage: $PROG [options] [<check/test-function-name>]"
+    echo ""
+    echo "<check/test-function-name> must be a function name from the list of tests"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help      This message"
+    echo "  -V, --version      Display version number"
+    echo "  -l, --list      List of tests"
+    echo ""
+    exit 0;
+}
+
+print_version(){
+echo "$PROG" ": " "$VERSION"
+}
+
+check_ipv4(){
+ping -c "$ping_count" -W 1 "$ipv4_address" >/dev/null 2>&1
+exit $?
+}
+
+check_ipv6(){
+ping -c "$ping_count" -W 1 "$ipv6_address" >/dev/null 2>&1
+exit $?
+}
+
+check_dns(){
+ping -c "$ping_count" -W 1 "$DOMAIN" >/dev/null 2>&1
+exit $?
+}
+
+check_dns(){
+ping -c "$ping_count" "$DOMAIN" >/dev/null 2>&1
+exit $?
+} 
+
+check_proxy_exist(){
+
+i=0
+while [ $i -lt  "${#proxy_list[*]}" ]; do
+   if [ -z "${proxy_list[$i]}" ]; then
+       exit 1
+       fi
+   i=$[ $i + 1]
+done
+exit 0
+}
+
+check_proxy_avaliable(){
+retval = check_proxy_exist || 1
+
+for proxy in $proxy_list; do
+    curl -x "$proxy" "http://$DOMAIN" >//dev/null 2>&1
+    if [ $? -ne 0 ]; then 
+	retval = 1
+    fi
+done
+exit $retval
+}
+
+get_resolv_conf(){
+if  test -e /etc/resolv.conf; then
+    cat /etc/resolv.conf    
+    exit 0 
+fi
+exit 1
+}
+
+check_browser_proxy(){
+exit 0
+}
+
+
+if [ "$#" -gt 0 ];then
+for input in "$@"; do
+    case "$input" in
+  -h | --help) show_ usage
+   ;;
+  -l | --list) listcmd=1
+   ;;
+  -v | --version) print_version
+   ;;
+  check_ipv4) check_ipv4
+   ;;
+  check_ipv6) check_ipv6
+   ;;
+  check_dns) check_dns
+   ;;
+  check_proxy_exist) check_proxy_exist
+   ;;
+  get_resolv_conf) get_resolv_conf
+   ;;
+  *) echo "Unrecognized option: $input"
+   ;;
+  esac
+done
+fi
+
+
+list_run(){
+    echo "$1" 
+}
+
+run(){
+    local retval=126
+    local func="$1"
+    $func 2>&1 | retval=0  retval=$? 
+    return $retval
+}
+
+if ! test -z $listcmd; then
+    runcmd=list_run
+fi
+
+$runcmd check_ipv4 "Check ipv4-connection"
+$runcmd check_ipv6 "Check ipv6-cjnnection"
+$runcmd check_proxy_exist "Check HTTP_PROXY variable"
+$runcmd get_resolv_conf "Check availiable server list"
+$runcmd check_dns "Check dns-connection"
