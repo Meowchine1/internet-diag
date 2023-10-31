@@ -1,0 +1,50 @@
+[Desktop Entry]
+name=Internet-connect diagnostic package
+name[ru_RU]=Диагностика интернет-соединения
+name[en_US]=Internet-connection diagnostic 
+
+description=Internet-connection diagnostic
+description[ru_RU]=Диагностика интернет-соединения
+description[en_US]=Internet-connection diagnostic
+
+icon=system-run
+
+[check_ipv4]
+name =Test outer ipv4-connection
+name[ru_RU]=Доступность внешнего ipv4 адреса
+name[en_US]=Test outer ipv4-connection
+description=Test outer ipv4-connection
+description[ru_RU]=Проверка доступности внешнего ipv4-адреса
+description[en_US]=Test outer ipv4-connection
+
+[check_ipv6]
+name =Test outer ipv6-connection
+name[ru_RU]=Доступность внешнего ipv6 адреса
+name[en_US]=Test outer ipv6-connection
+description=Test outer ipv6-connection
+description[ru_RU]=Проверка доступности внешнего ipv6 адреса
+description[en_US]=Test outer ipv6-connection
+
+[check_dns]
+name =Test outer ipv6-connection
+name[ru_RU]=Доступность внешнего DNS-адреса;
+name[en_US]=Test outer ipv6-connection
+description=Test outer ipv6-connection
+description[ru_RU]=Проверка доступности внешнего ipv6 адреса
+description[en_US]=Test outer ipv6-connection
+
+[check_proxy_exist]
+name =Check proxy server
+name[ru_RU]=Наличие прокси-сервера (переменные окружения);
+name[en_US]=Check proxy server
+description=test $HTTP_PROXY initialization
+description[ru_RU]=Проверка задана ли переменные
+description[en_US]=Check 
+
+[get_resolv_conf]
+name =Print resolv.conf
+name[ru_RU]=Вывод resolv.conf
+name[en_US]=Print resolv.conf
+description=resolv.conf content
+description[ru_RU]=Содержимое файла resolv.conf
+description[en_US]=resolv.conf content
