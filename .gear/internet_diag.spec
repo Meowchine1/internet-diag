@@ -13,7 +13,6 @@ Source: %name-%version.tar
 
 BuildRequires(pre): rpm-macros-alterator
 
-Requires: alterator-interface-diag1
 
 %description
 Active Directory domain environment diagnostic tool.
